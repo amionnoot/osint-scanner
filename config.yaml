@@ -1,0 +1,86 @@
+# ============================================================
+# OSINT Scanner – Konfiguration
+# ============================================================
+# Kopiere diese Datei nach config.local.yaml und passe sie an.
+# Starte mit: python main.py -c config.local.yaml
+# ============================================================
+
+target:
+  domain: "example.com"
+  organization: "Example Corp"
+
+modules:
+  whois:
+    enabled: true
+
+  dns:
+    enabled: true
+    record_types: ["A", "AAAA", "MX", "NS", "TXT", "SOA", "CNAME", "SRV"]
+
+  ct_logs:
+    enabled: true
+    api_url: "https://crt.sh"
+
+  tech_fingerprint:
+    enabled: true
+    timeout: 10
+
+  email_harvest:
+    enabled: true
+    sources: ["crt.sh", "pgp_keys"]
+
+  github_recon:
+    enabled: true
+    api_token: ""
+
+  shodan_passive:
+    enabled: false
+    api_key: ""
+
+  breach_check:
+    enabled: false
+    # HaveIBeenPwned API-Key (kostenpflichtig)
+    hibp_api_key: ""
+    # Verzögerung zwischen Anfragen (HIBP Rate-Limit: 1 req / 1.5s)
+    request_delay: 2.0
+
+  social_media:
+    enabled: true
+    # Plattformen, die geprüft werden sollen
+    platforms:
+      - github
+      - twitter
+      - linkedin
+      - facebook
+      - instagram
+    timeout: 10
+
+  google_dorking:
+    enabled: false
+    # Google Custom Search Engine (CSE) Credentials
+    api_key: ""
+    cse_id: ""
+    # Maximale Ergebnisse pro Dork
+    max_results_per_dork: 10
+
+  pastebin_monitor:
+    enabled: true
+    # Quellen für die Paste-Suche
+    sources:
+      - google_scrape
+    timeout: 15
+
+logging:
+  level: "INFO"
+  file: "osint_scan.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+reporting:
+  output_dir: "reports"
+  formats: ["json", "txt"]
+  include_raw_data: true
+
+rate_limiting:
+  requests_per_second: 2
+  retry_attempts: 3
+  retry_delay: 5
